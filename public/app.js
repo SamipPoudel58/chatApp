@@ -6,6 +6,7 @@ const handle = document.getElementById("handle");
   (btn = document.getElementById("send")),
   (output = document.getElementById("output")),
   (feedback = document.getElementById("feedback"));
+let win = document.querySelector("#chat-window");
 
 // Emit the inputs(message) to the server
 btn.addEventListener("click", sendMsg);
@@ -25,14 +26,17 @@ function sendMsg() {
     message: message.value,
     handle: handle.value,
   });
+  message.value = "";
 }
 
 // listen for events
 socket.on("chat", (data) => {
   feedback.innerHTML = "";
   output.innerHTML += `<p><strong>${data.handle}:</strong> ${data.message}</p>`;
+  win.scrollTo(0, win.scrollHeight - win.clientHeight);
 });
 
 socket.on("typing", (data) => {
   feedback.innerHTML = `<p><em>${data} is typing a message...</em></p>`;
+  win.scrollTo(0, win.scrollHeight - win.clientHeight);
 });
